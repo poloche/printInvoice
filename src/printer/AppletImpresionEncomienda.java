@@ -8,6 +8,8 @@ package printer;
  *
  * @author Administrador
  */
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,6 +33,8 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.PrintServiceAttributeSet;
 import javax.print.attribute.standard.*;
 import javax.swing.JApplet;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 //La clase debe de implementar la impresión implements Printable
 public class AppletImpresionEncomienda extends JApplet {
@@ -43,7 +47,7 @@ public class AppletImpresionEncomienda extends JApplet {
     private Factura factura = null;
     private ArrayList<Item> items = new ArrayList<Item>();
     public int copies = 1;
-    public String typeDocument = "factura";
+    public Document typeDocument = Document.FACTURA;
     public boolean debug = false;
 
     public AppletImpresionEncomienda() {
@@ -309,38 +313,79 @@ public class AppletImpresionEncomienda extends JApplet {
     }
 
     public static void main(String[] s) {
-        AppletImpresionEncomienda a = new AppletImpresionEncomienda();
+        final AppletImpresionEncomienda a = new AppletImpresionEncomienda();
 //        a.infoImpresoras();
-        a.debug = true;
-        System.out.println("El ejecutable es " + a.checkPrinter());
-        a.typeDocument = "facturaEncomienda";
-        a.setEncomienda("Paolo milano", "El alto", "una mochila", "A-1010", "6 de agosto", "Simon Pedro", "100", "67857495", "false", "sin valor declarado", "", "La paz");
-        a.addItem("1", "mochila", "100", "100");
-        a.setCabecera("2", "02", "Av ayacucho zona central", "terminal de buses", "Cochabamba", "4358089", "paolo", "Viajando al futuro", "Mobius it srl", "1234657");
-        a.imprimir();
-        a.typeDocument = "reciboEntrega";
-        a.imprimir();
+        ActionListener listener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("fatura")) {
+                    printFacturaEncomienda(a);
+                } else if (e.getActionCommand().equals("manifiesto")) {
+                    printManifiesto(a);
+                }
+            }
+        };
+        JButton facturaEncomienda = new JButton("Factura encomienda");
+        facturaEncomienda.setActionCommand("factura");
+        facturaEncomienda.addActionListener(listener);
+
+        JButton manifiesto = new JButton("Manifiesto");
+        manifiesto.setActionCommand("manifiesto");
+        manifiesto.addActionListener(listener);
+        Object buttons[] = new Object[2];
+        buttons[0] = facturaEncomienda;
+        buttons[1] = manifiesto;
+        JOptionPane.showOptionDialog(a, "Selecciona una opcion", "Tipo de impresion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, null);
+
     }
 
     private String getJobName() {
         String jobname = "printing document";
-        if (typeDocument.contains("factura")) {
+        if (typeDocument.equals(Document.FACTURA)) {
             if (factura != null) {
                 jobname = "Factura No ".concat(factura.getNumeroFactura());
             } else {
                 jobname = "Recibo " + typeDocument + " ".concat(encomienda.getGuia());
             }
         } else {
-            if (typeDocument.equalsIgnoreCase("guia")) {
+            if (typeDocument.equals(Document.GUIA)) {
                 jobname = "Guia de ".concat(encomienda.getTipo().getTitle()).concat(encomienda.getGuia());
-            } else if (typeDocument.contains("recibo")) {
+            } else if (typeDocument.equals(Document.RECIBO_ENTREGA) || typeDocument.equals(Document.RECIBO_POR_PAGAR)) {
                 jobname = "Guia de ".concat(encomienda.getTipo().getTitle()).concat(encomienda.getGuia());
-
             } else {
                 jobname = "Manifiesto  ".concat(manifiesto.fecha).concat("--").concat(manifiesto.nroBus);
 
             }
         }
         return jobname;
+    }
+
+    private static void printFacturaEncomienda(AppletImpresionEncomienda a) {
+        a.debug = true;
+        System.out.println("El ejecutable es " + a.checkPrinter());
+        a.typeDocument = Document.FACTURA;
+        a.setEncomienda("Paolo milano", "El alto", "una mochila", "A-1010", "6 de agosto", "Simon Pedro", "100", "67857495", "false", "sin valor declarado", "", "La paz");
+        a.addItem("1", "mochila", "100", "100");
+        a.setCabecera("2", "02", "Av ayacucho zona central", "terminal de buses", "Cochabamba", "4358089", "paolo", "Viajando al futuro", "Mobius it srl", "1234657");
+        a.imprimir();
+        a.typeDocument = Document.RECIBO_ENTREGA;
+        a.imprimir();
+    }
+
+    private static void printManifiesto(AppletImpresionEncomienda a) {
+        a.debug = true;
+        a.typeDocument = Document.MANIFIESTO;
+        a.setCabecera("2", "02", "Av ayacucho zona central", "terminal de buses", "Cochabamba", "4358089", "paolo", "Viajando al futuro", "Mobius it srl", "1234657");
+        a.setManifiesto("Pepe Arias", "2015-08-19", "18:30", "Santa cruz", "5");
+
+        for (int i = 100; i < 110; i++) {
+            a.addEncomienda("G-" + i + "S", "caja de erramientas", "100", "Normal");
+        }
+
+        for (int i = 110; i < 115; i++) {
+            a.addEncomienda("G-" + i + "S", "caja de erramientas con multiples cosas para poder manipular tuercas", "100", "Por Pagar");
+        }
+        a.imprimir();
     }
 }
