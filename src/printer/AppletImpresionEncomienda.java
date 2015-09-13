@@ -55,6 +55,10 @@ public class AppletImpresionEncomienda extends JApplet {
         encomiendas = new ArrayList<Encomienda>();
     }
 
+    public void setDocument(String document) {
+        this.typeDocument = Document.get(document);
+    }
+
     @Override
     public void init() {
 //        this.setSize(500, 500);
@@ -364,7 +368,7 @@ public class AppletImpresionEncomienda extends JApplet {
     private static void printFacturaEncomienda(AppletImpresionEncomienda a) {
         a.debug = true;
         System.out.println("El ejecutable es " + a.checkPrinter());
-        a.typeDocument = Document.FACTURA;
+        a.setDocument("factura");
         a.setEncomienda("Paolo milano", "El alto", "una mochila", "A-1010", "6 de agosto", "Simon Pedro", "100", "67857495", "false", "sin valor declarado", "", "La paz");
         a.addItem("1", "mochila", "100", "100");
         a.setCabecera("2", "02", "Av ayacucho zona central", "terminal de buses", "Cochabamba", "4358089", "paolo", "Viajando al futuro", "Mobius it srl", "1234657");
