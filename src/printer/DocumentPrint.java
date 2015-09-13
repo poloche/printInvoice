@@ -3,6 +3,7 @@ package printer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -32,10 +33,10 @@ public class DocumentPrint extends JPanel implements Printable {
     private Encomienda e;
     private List<Encomienda> encomiendas;
     private Factura fac;
-    private String typeDocument = "factura";
+    private Document typeDocument = Document.FACTURA;
     private int heigth = 150;
 
-    public DocumentPrint(String typeDocument) {
+    public DocumentPrint(Document typeDocument) {
         this.typeDocument = typeDocument;
         encomiendas = new ArrayList<Encomienda>();
     }
@@ -43,16 +44,20 @@ public class DocumentPrint extends JPanel implements Printable {
     @Override
     public void paint(Graphics g) {
 
-        if (typeDocument.contains("factura")) {
-            factura(g);
-        } else {
-            if (typeDocument.contains("guia")) {
+        switch (typeDocument) {
+            case FACTURA:
+                factura(g);
+                break;
+            case GUIA:
                 guia(g);
-            } else if (typeDocument.contains("reciboEntrega") || typeDocument.equalsIgnoreCase("reciboEntregaPP")) {
+                break;
+            case RECIBO_ENTREGA:
+            case RECIBO_POR_PAGAR:
                 printReciboEntrega(g);
-            } else {
+                break;
+            default:
                 lista(g);
-            }
+                break;
         }
     }
 
@@ -61,17 +66,22 @@ public class DocumentPrint extends JPanel implements Printable {
         Graphics2D g2 = (Graphics2D) g;
         if (pagina == 0) {
             try {
-                if (typeDocument.contains("factura")) {
-                    factura(g);
-                } else {
-                    if (typeDocument.contains("guia")) {
+                switch (typeDocument) {
+                    case FACTURA:
+                        factura(g);
+                        break;
+                    case GUIA:
                         guia(g);
-                    } else if (typeDocument.contains("reciboEntrega") || typeDocument.contains("reciboEntregaPP")) {
+                        break;
+                    case RECIBO_ENTREGA:
+                    case RECIBO_POR_PAGAR:
                         printReciboEntrega(g);
-                    } else {
+                        break;
+                    default:
                         lista(g);
-                    }
+                        break;
                 }
+
             } catch (Exception ne) {
                 ne.printStackTrace();
             }
@@ -771,7 +781,10 @@ public class DocumentPrint extends JPanel implements Printable {
         int inicio = y - 9;
         int fin = y;
         int totalManifiesto = 0;
-        g.drawRect(x, y - 9, x + 187, 11);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setPaint(Color.lightGray);
+        g2d.fill(new Rectangle2D.Double(x, y-9, x+187, 11));
+        g2d.setPaint(Color.BLACK);
         g.setFont(dialog8);
         g.drawString("Guia", x + 11, y);
         g.drawString("Detalle", x + 61, y);
@@ -789,16 +802,23 @@ public class DocumentPrint extends JPanel implements Printable {
             for (Encomienda enc : encomiendas) {
                 if (!enc.getTitle().equalsIgnoreCase(title)) {
                     g.drawString(enc.getTitle(), getX(enc.getTitle(), g.getFont(), g), y);
+                    g.drawLine(x, y+1, x + 200, y + 1);
                     y = y + 10;
                     title = enc.getTitle();
                 }
 
-                Graphics2D g2d = (Graphics2D) g;
+                
 //                float[] dashPattern = {5, 5, 5, 5};
 //                g2d.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT,
 //                        BasicStroke.JOIN_MITER, 1,
 //                        dashPattern, 0));
-                g.drawString(enc.getGuia(), x + 11, y);// 147
+                g.drawLine(x+15, y-5, x+15, y+3);
+                
+                y=y+4;
+                g.drawLine(x, y, x + 200, y );
+                int yAux =y;
+                y = drawBetweenXtoX1(enc.getGuia(), g.getFont(), g, x+50, x+180, y);
+                        //g.drawString(enc.getGuia(), x + 11, y);// 147
                 g.setFont(dialog9);
                 int sizeTotalE = g.getFontMetrics().stringWidth(enc.getTotal());
                 g.drawString(enc.getTotal(), (x + 199) - sizeTotalE, y);
@@ -810,7 +830,8 @@ public class DocumentPrint extends JPanel implements Printable {
                 if (enc.getTitle().equalsIgnoreCase("NORMAL")) {
                     totalManifiesto += Integer.parseInt(enc.getTotal());
                 }
-                y = drawBetweenXtoX1(detalleEnc, g.getFont(), g, x + 51, 170, y, 10);
+                y = drawBetweenXtoX1(detalleEnc, g.getFont(), g, x + 10, 170, y, 10);
+                g.drawLine(x+180, yAux, x+180, y-7);
 
                 g2d.draw(new Line2D.Float(x, y - 6, 199 + x, y - 6));
                 j++;
@@ -820,9 +841,9 @@ public class DocumentPrint extends JPanel implements Printable {
         fin = y - 6;
 
         g.drawLine(x, inicio, x, fin + 13);
-        g.drawLine(x + 10, inicio, x + 10, fin);
-        g.drawLine(x + 50, inicio, x + 50, fin);
-        g.drawLine(x + 169, inicio, x + 169, fin + 12);
+//        g.drawLine(x + 10, inicio, x + 10, fin);
+//        g.drawLine(x + 50, inicio, x + 50, fin);
+//        g.drawLine(x + 169, inicio, x + 169, fin + 12);
         g.drawLine(x + 199, inicio, x + 199, fin + 12);
         g.drawLine(x, fin, x + 199, fin);
 //        // Richard: Informacion de Mobius IT Solutions
@@ -912,7 +933,7 @@ public class DocumentPrint extends JPanel implements Printable {
         g.setFont(new Font("Verdana", Font.BOLD, 14));
 
         String aux = " RECIBO DE ENTREGA ";
-        if (typeDocument.equalsIgnoreCase("reciboEntregaPP")) {
+        if (typeDocument.equals(Document.RECIBO_POR_PAGAR)) {
             aux = " RECIBO DE ENTREGA       POR  PAGAR";
         }
 //        y = drawLine(g, "", aux, 5, 20, y, 20);
