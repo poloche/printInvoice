@@ -827,7 +827,7 @@ public class DocumentPrint extends JPanel implements Printable {
 //                g2d.setStroke(new BasicStroke(1));
 //                y = y + 9;
                 String detalleEnc = enc.getDetalle().toUpperCase().trim();
-                if (enc.getTitle().equalsIgnoreCase("NORMAL")) {
+                if (enc.getTitle().equalsIgnoreCase("NORMAL")|| enc.getTitle().equalsIgnoreCase("GIRO")) {
                     totalManifiesto += Integer.parseInt(enc.getTotal());
                 }
                 y = drawBetweenXtoX1(detalleEnc, g.getFont(), g, x + 10, 170, y, 10);
@@ -976,6 +976,7 @@ public class DocumentPrint extends JPanel implements Printable {
 
         y = y + 40;
         y = drawLine(g, "Firma  :", "..........................", x, xValue, y, 12);
+        y = drawLine(g, "        ", e.getReceptor(), x, xValue, y, 12,200);
 
         g.setFont(fdatosfactura.deriveFont(Font.BOLD));
         g.drawString("Usuario :", x, y);
