@@ -783,7 +783,7 @@ public class DocumentPrint extends JPanel implements Printable {
         int totalManifiesto = 0;
         Graphics2D g2d = (Graphics2D) g;
         g2d.setPaint(Color.lightGray);
-        g2d.fill(new Rectangle2D.Double(x, y-9, x+187, 11));
+        g2d.fill(new Rectangle2D.Double(x, y - 9, x + 187, 11));
         g2d.setPaint(Color.BLACK);
         g.setFont(dialog8);
         g.drawString("Guia", x + 11, y);
@@ -802,23 +802,22 @@ public class DocumentPrint extends JPanel implements Printable {
             for (Encomienda enc : encomiendas) {
                 if (!enc.getTitle().equalsIgnoreCase(title)) {
                     g.drawString(enc.getTitle(), getX(enc.getTitle(), g.getFont(), g), y);
-                    g.drawLine(x, y+1, x + 200, y + 1);
+                    g.drawLine(x, y + 1, x + 200, y + 1);
                     y = y + 10;
                     title = enc.getTitle();
                 }
 
-                
 //                float[] dashPattern = {5, 5, 5, 5};
 //                g2d.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT,
 //                        BasicStroke.JOIN_MITER, 1,
 //                        dashPattern, 0));
-                g.drawLine(x+15, y-5, x+15, y+3);
-                
-                y=y+4;
-                g.drawLine(x, y, x + 200, y );
-                int yAux =y;
-                y = drawBetweenXtoX1(enc.getGuia(), g.getFont(), g, x+50, x+180, y);
-                        //g.drawString(enc.getGuia(), x + 11, y);// 147
+                g.drawLine(x + 15, y - 5, x + 15, y + 3);
+
+                y = y + 4;
+                g.drawLine(x, y, x + 200, y);
+                int yAux = y;
+                y = drawBetweenXtoX1(enc.getGuia(), g.getFont(), g, x + 50, x + 180, y);
+                //g.drawString(enc.getGuia(), x + 11, y);// 147
                 g.setFont(dialog9);
                 int sizeTotalE = g.getFontMetrics().stringWidth(enc.getTotal());
                 g.drawString(enc.getTotal(), (x + 199) - sizeTotalE, y);
@@ -827,11 +826,11 @@ public class DocumentPrint extends JPanel implements Printable {
 //                g2d.setStroke(new BasicStroke(1));
 //                y = y + 9;
                 String detalleEnc = enc.getDetalle().toUpperCase().trim();
-                if (enc.getTitle().equalsIgnoreCase("NORMAL")|| enc.getTitle().equalsIgnoreCase("GIRO")) {
+                if (enc.getTitle().equalsIgnoreCase("NORMAL") || enc.getTitle().equalsIgnoreCase("GIRO")) {
                     totalManifiesto += Integer.parseInt(enc.getTotal());
                 }
                 y = drawBetweenXtoX1(detalleEnc, g.getFont(), g, x + 10, 170, y, 10);
-                g.drawLine(x+180, yAux, x+180, y-7);
+                g.drawLine(x + 180, yAux, x + 180, y - 7);
 
                 g2d.draw(new Line2D.Float(x, y - 6, 199 + x, y - 6));
                 j++;
@@ -967,7 +966,10 @@ public class DocumentPrint extends JPanel implements Printable {
         y = drawLine(g, "Recoje :", e.getReceptor(), x, xValue, y, 12);
         y = drawLine(g, "Documento :", e.getCarnet(), x, xValue, y, 12);
         y = drawLine(g, "Telefono  :", e.getTelefono(), x, xValue, y, 12);
-
+        
+        if (fac != null && fac.getNumeroFactura() != null && !fac.getNumeroFactura().isEmpty()) {
+            y = drawLine(g, "Segun Factura", " : " + fac.getNumeroFactura(), x, xValue + 25, y, 14);
+        }
         boolean par = false;
         int xPrecio = 165;
         //      PINTAMOS LOS ITEMS
@@ -975,14 +977,15 @@ public class DocumentPrint extends JPanel implements Printable {
         //      PINTAMOS LOS ITEMS
 
         y = y + 40;
-        y = drawLine(g, "Firma  :", "..........................", x, xValue, y, 12);
-        y = drawLine(g, "        ", e.getReceptor(), x, xValue, y, 12,200);
 
         g.setFont(fdatosfactura.deriveFont(Font.BOLD));
         g.drawString("Usuario :", x, y);
         g.setFont(fdetalle.deriveFont(Font.BOLD));
         g.drawString(cab.usuario, x + 100, y);
 
+        y = y + 40;
+        y = drawLine(g, "Firma  :", "..........................", x, xValue, y, 12);
+        y = drawLine(g, "        ", e.getReceptor(), x, xValue, y, 12, 200);
         y = y + 8;
         g.setFont(flinea);
         g.drawString(line, x, y);
