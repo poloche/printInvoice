@@ -316,33 +316,33 @@ public class AppletImpresionEncomienda extends JApplet {
         return json;
     }
 
-    public static void main(String[] s) {
-        final AppletImpresionEncomienda a = new AppletImpresionEncomienda();
-//        a.infoImpresoras();
-        ActionListener listener = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (e.getActionCommand().equals("fatura")) {
-                    printFacturaEncomienda(a);
-                } else if (e.getActionCommand().equals("manifiesto")) {
-                    printManifiesto(a);
-                }
-            }
-        };
-        JButton facturaEncomienda = new JButton("Factura encomienda");
-        facturaEncomienda.setActionCommand("factura");
-        facturaEncomienda.addActionListener(listener);
-
-        JButton manifiesto = new JButton("Manifiesto");
-        manifiesto.setActionCommand("manifiesto");
-        manifiesto.addActionListener(listener);
-        Object buttons[] = new Object[2];
-        buttons[0] = facturaEncomienda;
-        buttons[1] = manifiesto;
-        JOptionPane.showOptionDialog(a, "Selecciona una opcion", "Tipo de impresion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, null);
-
-    }
+//    public static void main(String[] s) {
+//        final AppletImpresionEncomienda a = new AppletImpresionEncomienda();
+////        a.infoImpresoras();
+//        ActionListener listener = new ActionListener() {
+//
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (e.getActionCommand().equals("fatura")) {
+//                    printFacturaEncomienda(a);
+//                } else if (e.getActionCommand().equals("manifiesto")) {
+//                    printManifiesto(a);
+//                }
+//            }
+//        };
+//        JButton facturaEncomienda = new JButton("Factura encomienda");
+//        facturaEncomienda.setActionCommand("factura");
+//        facturaEncomienda.addActionListener(listener);
+//
+//        JButton manifiesto = new JButton("Manifiesto");
+//        manifiesto.setActionCommand("manifiesto");
+//        manifiesto.addActionListener(listener);
+//        Object buttons[] = new Object[2];
+//        buttons[0] = facturaEncomienda;
+//        buttons[1] = manifiesto;
+//        JOptionPane.showOptionDialog(a, "Selecciona una opcion", "Tipo de impresion", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, null);
+//
+//    }
 
     private String getJobName() {
         String jobname = "printing document";
