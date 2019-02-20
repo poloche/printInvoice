@@ -35,6 +35,7 @@ public class DocumentPrint extends JPanel implements Printable {
     private Factura fac;
     private Document typeDocument = Document.FACTURA;
     private int heigth = 150;
+    private static final int MAX_WIDTH = 200;
 
     public DocumentPrint(Document typeDocument) {
         this.typeDocument = typeDocument;
@@ -387,7 +388,7 @@ public class DocumentPrint extends JPanel implements Printable {
         Font fdetalle = new Font("Verdana", Font.PLAIN, 10);
         Font fdetalle2 = new Font("Dialog", Font.BOLD, 12);
 
-        String line = "----------------------------------------";
+        String line = "-----------------------------------------------------------";
 
         int x = 12;
         int y = 2;
@@ -408,7 +409,7 @@ public class DocumentPrint extends JPanel implements Printable {
         } else {
             aux = "F A C T U R A";
             g.drawString(aux, getX(aux, g.getFont(), g), y);// 49
-            y = y + 9;
+            y = y + g.getFontMetrics().getHeight();
             g.setFont(fdatosfactura);
             if (fac.isOriginal()) {
                 aux = "O R I G I N A L";
@@ -465,13 +466,13 @@ public class DocumentPrint extends JPanel implements Printable {
             y = drawBetweenXtoX1(fac.getNombre(), g.getFont(), g, x + 70, 210, y, 13);
             y = drawLine(g, "NIT/CI: ", fac.getNit(), x, x + 50, y, 8);
 
-            y = y + 8;
+            y = y + 5;
             g.setFont(flinea);
             g.drawString(line, x, y);
         }
         g.setFont(fdatosfactura.deriveFont(Font.BOLD));
 
-        y = y + 12;
+        y = y + 10;
 
         y = drawLine(g, "Remitente :", e.getRemitente(), x, x + 70, y, 12);
         y = drawLine(g, "Destinatario :", e.getConsignatario(), x, x + 70, y, 12);
@@ -634,8 +635,7 @@ public class DocumentPrint extends JPanel implements Printable {
             String cad1 = "--\"ESTA FACTURA CONTRIBUYE AL DESARROLLO-";
             cad1 += " -----DEL PAIS. EL USO ILICITO DE ESTA SERA--- ";
             cad1 += " --------SANCIONADO DE ACUERDO A LEY\"    ";
-            String cad2 = "LEY 453: \"Tienes derecho a recibir informacion sobre las--   ";
-            cad2 += "-----caracteristicas y contenidos de los servicios que utilices\"";
+            String cad2 = cab.getLeyendaSucursal();
 
             y = y + 7;
             g.setFont(fdatosfactura.deriveFont(Font.BOLD).deriveFont(new Float(7)));
@@ -966,7 +966,7 @@ public class DocumentPrint extends JPanel implements Printable {
         y = drawLine(g, "Recoje :", e.getReceptor(), x, xValue, y, 12);
         y = drawLine(g, "Documento :", e.getCarnet(), x, xValue, y, 12);
         y = drawLine(g, "Telefono  :", e.getTelefono(), x, xValue, y, 12);
-        
+
         if (fac != null && fac.getNumeroFactura() != null && !fac.getNumeroFactura().isEmpty()) {
             y = drawLine(g, "Segun Factura", " : " + fac.getNumeroFactura(), x, xValue + 25, y, 14);
         }

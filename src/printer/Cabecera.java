@@ -29,6 +29,7 @@ class Cabecera {
     private String tipoFactura;
     private boolean ciudadCapital;
     private String ciudad2;
+    private String leyendaSucursal;
 
     public boolean isPrintGuia() {
         return printGuia;
@@ -123,6 +124,14 @@ class Cabecera {
 
     public void setCiudad2(String ciudad2) {
         this.ciudad2 = ciudad2;
+    }
+
+    void setLeyendaSucursal(String leyendaSucursal) {
+        this.leyendaSucursal=leyendaSucursal; 
+    }
+
+    public String getLeyendaSucursal() {
+        return this.leyendaSucursal;
     }
 
 }

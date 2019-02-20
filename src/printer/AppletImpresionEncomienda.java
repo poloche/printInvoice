@@ -155,13 +155,14 @@ public class AppletImpresionEncomienda extends JApplet {
         encomiendas.add(enc);
     }
 
-    public void setInfoSucursal(String municipio, String leyendaActividad, String tipoFactura, boolean isCapital, String nombreCiudad2) {
+    public void setInfoSucursal(String municipio, String leyendaActividad, String tipoFactura, boolean isCapital, String nombreCiudad2, String leyendaSucursal) {
 
         cabecera.setMunicipio(municipio);
         cabecera.setLeyendaActividad(leyendaActividad == null ? "" : leyendaActividad);
         cabecera.setTipoFactura(tipoFactura == null ? "" : tipoFactura);
         cabecera.setCiudadCapital(isCapital);
         cabecera.setCiudad2(nombreCiudad2 == null ? "" : nombreCiudad2);
+        cabecera.setLeyendaSucursal(leyendaSucursal==null?"":leyendaSucursal);
     }
 
     public void setFactura(String fecha, String hora, String nombre, String nit,
@@ -323,7 +324,7 @@ public class AppletImpresionEncomienda extends JApplet {
 //
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
-//                if (e.getActionCommand().equals("fatura")) {
+//                if (e.getActionCommand().equals("factura")) {
 //                    printFacturaEncomienda(a);
 //                } else if (e.getActionCommand().equals("manifiesto")) {
 //                    printManifiesto(a);
@@ -368,13 +369,15 @@ public class AppletImpresionEncomienda extends JApplet {
     private static void printFacturaEncomienda(AppletImpresionEncomienda a) {
         a.debug = true;
         System.out.println("El ejecutable es " + a.checkPrinter());
+        a.typeDocument = Document.FACTURA;
         a.setDocument("factura");
         a.setEncomienda("Paolo milano", "El alto", "una mochila", "A-1010", "6 de agosto", "Simon Pedro", "100", "67857495", "false", "sin valor declarado", "", "La paz");
         a.addItem("1", "mochila", "100", "100");
         a.setCabecera("2", "02", "Av ayacucho zona central", "terminal de buses", "Cochabamba", "4358089", "paolo", "Viajando al futuro", "Mobius it srl", "1234657");
+        a.setFactura("16/02/2019", "15:40", "Lizarazu", "5241355", "101", "802015151515151", "F5-4D-89-25", "31/01/2019", "200", "docientos 00/100 bolivianos");
         a.imprimir();
-        a.typeDocument = Document.RECIBO_ENTREGA;
-        a.imprimir();
+//        a.typeDocument = Document.RECIBO_ENTREGA;
+//        a.imprimir();
     }
 
     private static void printManifiesto(AppletImpresionEncomienda a) {
