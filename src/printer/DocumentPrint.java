@@ -96,7 +96,6 @@ public class DocumentPrint extends JPanel implements Printable {
 //        double AnchoPanel = (double) this.getWidth();
         double alturaPanel = (double) heigth;
 //        double escala = 1;
-//        System.out.println(" AltoHoja " + alturaPag + "    altoPanel : " + alturaPanel);
 //        //El panel no cabria en la hoja, asi que necesitamos reescalarlo:
 //        if (AnchoPanel >= anchoPag) {
 //            escala = anchoPag / AnchoPanel;
@@ -104,7 +103,6 @@ public class DocumentPrint extends JPanel implements Printable {
 //
 //        g2.scale(escala, escala);
         int NumPages = (int) (alturaPanel / alturaPag);
-//        System.out.println(" Numero de paginas " + NumPages + ", Pagina Actual :" + pagina);
 
         g2.translate(0f, -pagina * alturaPag);
         if (pagina != NumPages) {
