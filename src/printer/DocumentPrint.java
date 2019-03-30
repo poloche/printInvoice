@@ -37,6 +37,8 @@ public class DocumentPrint extends JPanel implements Printable {
     private int heigth = 150;
     private static final int MAX_WIDTH = 200;
 
+    private static final String lineSeparator = "-------------------------------------------------------------";
+    
     public DocumentPrint(Document typeDocument) {
         this.typeDocument = typeDocument;
         encomiendas = new ArrayList<Encomienda>();
@@ -124,8 +126,6 @@ public class DocumentPrint extends JPanel implements Printable {
         Font fdatosfactura = new Font("Verdana", Font.PLAIN, 8);
         Font fdetalle = new Font("Verdana", Font.PLAIN, 10);
 
-        String line = "----------------------------------------";
-
         int x = 12;
         int xValue = 82;
         int y = 2;
@@ -151,7 +151,7 @@ public class DocumentPrint extends JPanel implements Printable {
 
         y = y + 5;
         g.setFont(flinea);
-        g.drawString(line, x, y);
+        g.drawString(lineSeparator, x, y);
 
         y = y + 10;
 
@@ -252,7 +252,7 @@ public class DocumentPrint extends JPanel implements Printable {
 
         y = y + 50;
         g.setFont(fdatosfactura.deriveFont(Font.BOLD));
-        g.drawString(line, x, y);
+        g.drawString(lineSeparator, x, y);
         g.setFont(fdetalle.deriveFont(Font.BOLD));
         y = y + 8;
         if (!e.getTipo().equals(Encomienda.Tipo.SI)) {
@@ -260,7 +260,7 @@ public class DocumentPrint extends JPanel implements Printable {
             y = drawLine(g, "", e.getRemitente(), x, getX(e.getRemitente(), g.getFont(), g), y, 12);
         }
         g.setFont(flinea);
-        g.drawString(line, x, y);
+        g.drawString(lineSeparator, x, y);
 
         y = y + 7;
         drawQuantum(fdatosfactura, g, y);
@@ -388,8 +388,6 @@ public class DocumentPrint extends JPanel implements Printable {
         Font fdetalle = new Font("Verdana", Font.PLAIN, 10);
         Font fdetalle2 = new Font("Dialog", Font.BOLD, 12);
 
-        String line = "-----------------------------------------------------------";
-
         int x = 12;
         int y = 2;
 
@@ -439,7 +437,7 @@ public class DocumentPrint extends JPanel implements Printable {
 
             y = y + 5;
             g.setFont(flinea);
-            g.drawString(line, x, y);
+            g.drawString(lineSeparator, x, y);
 
             y = y + 10;
             g.setFont(fdatosfactura.deriveFont(Font.BOLD));
@@ -454,7 +452,7 @@ public class DocumentPrint extends JPanel implements Printable {
             g.setFont(fdatosfactura.deriveFont(Font.BOLD));
             y = drawLine(g, "#Autorización: ", fac.getAutorizacion(), x, x + 100, y, 8);
             g.setFont(flinea);
-            g.drawString(line, x, y);
+            g.drawString(lineSeparator, x, y);
 
             y = y + 10;
             g.setFont(fdatosfactura.deriveFont(Font.BOLD));
@@ -468,7 +466,7 @@ public class DocumentPrint extends JPanel implements Printable {
 
             y = y + 5;
             g.setFont(flinea);
-            g.drawString(line, x, y);
+            g.drawString(lineSeparator, x, y);
         }
         g.setFont(fdatosfactura.deriveFont(Font.BOLD));
 
@@ -478,7 +476,7 @@ public class DocumentPrint extends JPanel implements Printable {
         y = drawLine(g, "Destinatario :", e.getConsignatario(), x, x + 70, y, 12);
         y = drawLine(g, "Telefono :", e.getTelefono(), x, x + 70, y, 12);
         y = y - 7;
-        g.drawString(line, x, y);
+        g.drawString(lineSeparator, x, y);
         g.setFont(fdetalle2.deriveFont(Font.BOLD, 13));
         y = y + 12;
         g.drawString("GUIA : " + e.getGuia(), getXTam("GUIA : " + e.getGuia(), g.getFont(), g, x, 200), y);
@@ -604,7 +602,7 @@ public class DocumentPrint extends JPanel implements Printable {
         if (null != fac) {
             y = y + 8;
             g.setFont(flinea);
-            g.drawString(line, x, y);
+            g.drawString(lineSeparator, x, y);
             /**
              ****************************************************
              * ************* DIBUJAMOS EL CODIGO QR *************
@@ -630,7 +628,7 @@ public class DocumentPrint extends JPanel implements Printable {
                 Logger.getLogger(DocumentPrint.class.getName()).log(Level.SEVERE, null, ex);
             }
             g.setFont(flinea);
-            g.drawString(line, x, y);
+            g.drawString(lineSeparator, x, y);
 
             String cad1 = "--\"ESTA FACTURA CONTRIBUYE AL DESARROLLO-";
             cad1 += " -----DEL PAIS. EL USO ILICITO DE ESTA SERA--- ";
@@ -647,7 +645,7 @@ public class DocumentPrint extends JPanel implements Printable {
 
         y = y + 8;
         g.setFont(flinea);
-        g.drawString(line, x, y);
+        g.drawString(lineSeparator, x, y);
 
         y = y + 7;
         drawQuantum(fdatosfactura, g, y);
